@@ -1,2 +1,2 @@
 # barnabe
-Baranbé Church Management: Sistema Online de Gerenciamento de Igrejas
+Baranabé Church Management: Sistema Online de Gerenciamento de Igrejas
