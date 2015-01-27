@@ -52,3 +52,12 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Upload Folder
+uploaded_images/
+
+#Jetbrains
+.idea
+
+#DBSqlite
+db.sqlite3
