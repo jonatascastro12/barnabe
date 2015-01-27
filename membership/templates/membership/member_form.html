@@ -1,0 +1,41 @@
+{% extends "dashboard_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block page_title %}
+{% if form.instance.id %}
+    <h1 class="page-header">{% trans 'Members' %} <small>{% trans 'Editing '%} {{ form.instance.person.name }}</small></h1>
+{% else %}
+    <h1 class="page-header">{% trans 'Members' %} <small>{% trans 'New'%}</small></h1>
+{% endif %}
+
+{% endblock %}
+
+{% block page_content %}
+
+{% bootstrap_messages %}
+<form class="form-horizontal" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans "Personal information" %}</div>
+        <div class="panel-body">
+            {% bootstrap_form person_form layout='horizontal' %}
+        </div>
+    </div>
+     <div class="panel panel-default">
+        <div class="panel-heading">{% trans "Contact information" %}</div>
+        <div class="panel-body">
+            {% bootstrap_form person_contact_form layout='horizontal' %}
+        </div>
+    </div>
+     <div class="panel panel-default">
+        <div class="panel-heading">{% trans "Echlesiastic information" %}</div>
+        <div class="panel-body">
+            {% bootstrap_form form layout='horizontal' %}
+        </div>
+    </div>
+     {% buttons submit='Salvar' reset='Cancelar' layout='horizontal' %}{% endbuttons %}
+</form>
+
+
+{% endblock %}

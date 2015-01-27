@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-27 09:24-0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\barnabe\errors.py:17
+msgid "Only jpg and png format is permitted."
+msgstr "Apenas formatos jpeg e png são permitidos."
+
+#: .\barnabe\errors.py:21
+msgid "The file is not a image or corrupted."
+msgstr "O arquivo não é uma imagem ou está corrompido."
+
+#: .\barnabe\errors.py:25
+msgid "Image must be at least 512x512 resolution."
+msgstr "Imagem deve ter resolução mínima de 512x512"
+
+#: .\barnabe\errors.py:29
+msgid "Get request is not permitted."
+msgstr "GET request não é permitido"
+
+#: .\barnabe\views.py:24
+msgid "Overview"
+msgstr "Visão Geral"
+
+#: .\templates\admin\base.html:30
+msgid "Welcome,"
+msgstr "Bem-vindo, "
+
+#: .\templates\admin\base.html:36
+msgid "Documentation"
+msgstr "Documentação"
+
+#: .\templates\admin\base.html:39
+msgid "Change password"
+msgstr "Alterar senha"
+
+#: .\templates\admin\base.html:41
+msgid "Log out"
+msgstr "Sair"
+
+#: .\templates\admin\base.html:50
+msgid "Home"
+msgstr "Início"
+
+#: .\templates\admin\base_site.html:3
+msgid "Barnabe :: Painel Administrativo"
+msgstr "Barnabé :: Painel Adminsitrativo"
+
+#: .\templates\admin\base_site.html:6
+msgid "Banabe"
+msgstr "Barnabé"
+
+#~ msgid "Name"
+#~ msgstr "Nome"
+
+#~ msgid "Function"
+#~ msgstr "Função"

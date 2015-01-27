@@ -1,0 +1,52 @@
+{% extends "dashboard_base.html" %}
+{% load i18n %}
+
+{% block page_title %}
+<h1 class="page-header">{% trans 'Members' %} <a href="{% url 'member_add' %}" class="btn pull-right btn-primary">{% trans 'New' %} {% trans 'Member' %}</a></h1>
+{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-12">
+
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th><input type="checkbox"></th>
+            <th>#</th>
+            <th>{% trans 'Name' %}</th>
+            <th>{% trans 'Function' %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for member in object_list %}
+        <tr class="member-tr" id="tr-member-{{member.id}}"><td id="select-member-{{member.id}}"><input type="checkbox"></td><td>{{member.id}}</td><td><a href="{{ member.get_absolute_url }}">{{ member.person.name }}</a> <span class="edit-link">- <a href="{% url 'member_edit' member.id %}">{% trans 'edit' %}</a></span></td><td>{{ member.memberFunction }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+ {% if is_paginated %}
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li>
+                <a href="{% url 'member' %}?page={{ page_obj.previous_page_number }}" aria-label="{% trans 'Previous' %}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for page in paginator.page_range %}
+                <li  {% if page == page_obj.number %} class="active" {% endif %}><a href="{% url 'member' %}?page={{ page }}">{{ page }} {% if page == page_obj.number %} <span class="sr-only">(current)</span> {% endif %}</a></li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li>
+                <a href="{% url 'member' %}?page={{ page_obj.next_page_number }}" aria-label="{% trans 'Next' %}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+      </ul>
+    </nav>
+{% endif %}
+{% endblock %}
