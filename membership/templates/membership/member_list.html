@@ -5,27 +5,46 @@
 <h1 class="page-header">{% trans 'Members' %} <a href="{% url 'member_add' %}" class="btn pull-right btn-primary">{% trans 'New' %} {% trans 'Member' %}</a></h1>
 {% endblock %}
 
+{% block header_media %}
+    {{ media_css }}
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.dataTables.min.css">
+{% endblock %}
+
 {% block page_content %}
 <div class="row">
     <div class="col-md-12">
-
+        <table class="table" id="member-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{% trans 'Name' %}</th>
+                    <th>{% trans 'Function' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {# for member in object_list #}
+                {#<tr class="member-tr" id="tr-member-{{member.id}}"><td id="select-member-{{member.id}}"><input type="checkbox"></td><td>{{member.id}}</td><td><a href="{{ member.get_absolute_url }}">{{ member.person.name }}</a> <span class="edit-link">- <a href="{% url 'member_edit' member.id %}">{% trans 'edit' %}</a></span></td><td>{{ member.memberFunction }}</td></tr>#}
+            {# endfor #}
+            </tbody>
+        </table>
     </div>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th><input type="checkbox"></th>
-            <th>#</th>
-            <th>{% trans 'Name' %}</th>
-            <th>{% trans 'Function' %}</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for member in object_list %}
-        <tr class="member-tr" id="tr-member-{{member.id}}"><td id="select-member-{{member.id}}"><input type="checkbox"></td><td>{{member.id}}</td><td><a href="{{ member.get_absolute_url }}">{{ member.person.name }}</a> <span class="edit-link">- <a href="{% url 'member_edit' member.id %}">{% trans 'edit' %}</a></span></td><td>{{ member.memberFunction }}</td></tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="row" id="group-multiple-selection">
+    <div class="col-md-12">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default">{% trans 'Multiple selection action' %}</button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'Remove' %}</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> {% trans 'Print ID Cards' %}</a></li>
+          </ul>
+        </div>
+    </div>
+</div>
  {% if is_paginated %}
     <nav>
         <ul class="pagination">
@@ -49,4 +68,57 @@
       </ul>
     </nav>
 {% endif %}
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $.fn.dataTable.ext.errMode = 'throw';
+            var table = $('#member-table').DataTable({
+                serverSide: true,
+                ajax: '{% url 'member_list_table' %}',
+                 language: {
+                    "emptyTable":     "{% trans 'No data available in table'%}",
+                    "info":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
+                    "infoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
+                    "infoFiltered":   "({% trans 'filtered from _MAX_ total entries'%})",
+                    "infoPostFix":    "",
+                    "thousands":      ",",
+                    "lengthMenu":     "{% trans 'Show _MENU_ entries'%}",
+                    "loadingRecords": "{% trans 'Loading'%}...",
+                    "processing":     "{% trans 'Processing'%}...",
+                    "search":         "{% trans 'Search'%}:",
+                    "zeroRecords":    "{% trans 'No matching records found'%}",
+                    "paginate": {
+                        "first":      "{% trans 'First'%}",
+                        "last":       "{% trans 'Last'%}",
+                        "next":       "{% trans 'Next'%}",
+                        "previous":   "{% trans 'Previous'%}"
+                    },
+                    "aria": {
+                        "sortAscending": "{% trans 'activate to sort column ascending'%}",
+                        "sortDescending": "{% trans 'activate to sort column descending'%}"
+                    }
+                }
+            });
+
+
+            $('#member-table tbody').on( 'click', 'tr', function () {
+                $(this).toggleClass('selected');
+                if(table.rows('.selected').data().length > 0){
+                    $('#group-multiple-selection').slideDown();
+                }else{
+                    $('#group-multiple-selection').slideUp();
+                }
+            });
+
+
+        } );
+
+
+
+
+    </script>
+{% endblock %}
+
+{% block footer_media %}
+    {{ media_js }}
+    <script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/jquery.dataTables.min.js"></script>
 {% endblock %}

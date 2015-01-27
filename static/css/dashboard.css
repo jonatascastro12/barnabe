@@ -142,3 +142,9 @@ span.edit-link {
 .member-tr:hover .edit-link{
   visibility: visible;
 }
+
+/*members_list*/
+#group-multiple-selection{
+    margin-bottom: 15px;
+    display: none;
+}

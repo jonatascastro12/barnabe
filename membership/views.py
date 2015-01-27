@@ -2,11 +2,12 @@ import imghdr
 import json
 import os
 from PIL import Image
-from django.core.files.base import File
 from django.core.files.temp import NamedTemporaryFile
-from django.db.models.fields.files import ImageFieldFile
+from django.db.models.query_utils import Q
 from django.http.response import HttpResponse, HttpResponseRedirect, Http404
 from django.utils.translation import ugettext as _
+from django.views.generic.list import ListView
+from django_datatables_view.base_datatable_view import BaseDatatableView
 from barnabe import errors
 from barnabe.settings import MEDIA_ROOT, MEDIA_URL
 from barnabe.views import DashboardListView, DashboardDetailView, DashboardFormView, DashboardUpdateView
@@ -17,6 +18,59 @@ from membership.forms import MemberForm, PersonForm, PersonContactForm, PersonMa
 class MemberListView(DashboardListView):
     queryset = models.Member.objects.all()
     paginate_by = 25
+
+class MemberListTableView(ListView, BaseDatatableView):
+    model = models.Member
+    columns = ['id', 'person.name', 'memberFunction.name']
+    order_columns = ['id', 'person.name', 'memberFunction.name']
+
+    def filter_queryset(self, qs):
+        """ If search['value'] is provided then filter all searchable columns using istartswith
+        """
+        if not self.pre_camel_case_notation:
+            # get global search value
+            search = self.request.GET.get('search[value]', None)
+            col_data = self.extract_datatables_column_data()
+            q = Q()
+            for col_no, col in enumerate(col_data):
+                # apply global search to all searchable columns
+                if search and col['searchable']:
+                    if '.' in self.columns[col_no]:
+                        self.columns[col_no] = self.columns[col_no].replace('.', '__')
+                    q |= Q(**{'{0}__istartswith'.format(self.columns[col_no]): search})
+
+                # column specific filter
+                if col['search.value']:
+                    qs = qs.filter(**{'{0}__istartswith'.format(self.columns[col_no]): col['search.value']})
+            qs = qs.filter(q)
+        return qs
+
+    def render_column(self, row, column):
+        """ Renders a column on a row
+        """
+        if '__' in column:
+            column = column.replace('__', '.')
+
+        if hasattr(row, 'get_%s_display' % column):
+            # It's a choice field
+            text = getattr(row, 'get_%s_display' % column)()
+        else:
+            try:
+                text = getattr(row, column)
+            except AttributeError:
+                obj = row
+                for part in column.split('.'):
+                    if obj is None:
+                        break
+                    obj = getattr(obj, part)
+
+                text = obj
+
+        if hasattr(row, 'get_absolute_url'):
+            return '<a href="%s">%s</a>' % (row.get_absolute_url(), text)
+        else:
+            return text
+
 
 class MemberDetailView(DashboardDetailView):
     model = models.Member

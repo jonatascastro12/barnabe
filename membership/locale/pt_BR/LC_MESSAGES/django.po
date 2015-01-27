@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-27 09:24-0200\n"
+"POT-Creation-Date: 2015-01-27 17:34-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgid "Church Type"
 msgstr "Tipo de igreja"
 
 #: .\membership\models.py:67
-#: .\membership\templates\membership\member_list.html:19
+#: .\membership\templates\membership\member_list.html:23
 msgid "Name"
 msgstr "Nome"
 
@@ -57,6 +57,7 @@ msgstr "Tamanho máximo permitido: 500Kb"
 #: .\membership\templates\jcrop\jcrop_image_widget.html:30
 #: .\membership\templates\jcrop\jcrop_image_widget.html:35
 #: .\membership\templates\jcrop\jcrop_image_widget.html:40
+#: .\membership\templates\membership\member_list.html:70
 msgid "Loading"
 msgstr "Carregando"
 
@@ -100,7 +101,6 @@ msgid "Details of"
 msgstr "Detalhes de"
 
 #: .\membership\templates\membership\member_detail.html:5
-#: .\membership\templates\membership\member_list.html:25
 msgid "edit"
 msgstr "editar"
 
@@ -159,17 +159,67 @@ msgstr "Novo"
 msgid "Echlesiastic information"
 msgstr "Dados eclesiásticos"
 
-#: .\membership\templates\membership\member_list.html:20
+#: .\membership\templates\membership\member_list.html:24
 msgid "Function"
 msgstr "Função"
 
-#: .\membership\templates\membership\member_list.html:34
+#: .\membership\templates\membership\member_list.html:38
+#: .\membership\templates\membership\member_list.html:78
 msgid "Previous"
 msgstr "Anterior"
 
-#: .\membership\templates\membership\member_list.html:44
+#: .\membership\templates\membership\member_list.html:48
+#: .\membership\templates\membership\member_list.html:77
 msgid "Next"
 msgstr "Próximo"
+
+#: .\membership\templates\membership\member_list.html:63
+msgid "No data available in table"
+msgstr "Nenhum registro encontrado"
+
+#: .\membership\templates\membership\member_list.html:64
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Mostrando _START_ a _END_ de _TOTAL_ registros"
+
+#: .\membership\templates\membership\member_list.html:65
+msgid "Showing 0 to 0 of 0 entries"
+msgstr "Mostrando 0 a 0 de 0 registros"
+
+#: .\membership\templates\membership\member_list.html:66
+msgid "filtered from _MAX_ total entries"
+msgstr "filtrado de _MAX_ registros no total"
+
+#: .\membership\templates\membership\member_list.html:69
+msgid "Show _MENU_ entries"
+msgstr "Mostrando _MENU_ registros"
+
+#: .\membership\templates\membership\member_list.html:71
+msgid "Processing"
+msgstr "Processando"
+
+#: .\membership\templates\membership\member_list.html:72
+msgid "Search"
+msgstr "Buscar"
+
+#: .\membership\templates\membership\member_list.html:73
+msgid "No matching records found"
+msgstr "Nenhum registro encontrado"
+
+#: .\membership\templates\membership\member_list.html:75
+msgid "First"
+msgstr "Primeiro"
+
+#: .\membership\templates\membership\member_list.html:76
+msgid "Last"
+msgstr "Último"
+
+#: .\membership\templates\membership\member_list.html:81
+msgid "activate to sort column ascending"
+msgstr "Ordenar crescente"
+
+#: .\membership\templates\membership\member_list.html:82
+msgid "activate to sort column descending"
+msgstr "Ordenar decrescente"
 
 #, fuzzy
 #~ msgid "New Member"
