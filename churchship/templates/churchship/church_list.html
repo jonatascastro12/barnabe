@@ -1,0 +1,143 @@
+{% extends "dashboard_base.html" %}
+{% load i18n %}
+
+{% block page_title %}
+<h1 class="page-header">{% trans 'Church' %}</h1>
+{% endblock %}
+
+{% block header_media %}
+    {{ media_css }}
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block page_content %}
+<div class="panel panel-default">
+  <div class="panel-heading">{% trans 'General information' %}</div>
+  <div class="panel-body">
+      <div class="row">
+          {% if main_church.logo %}
+          <div class="col-xs-6 col-md-3">
+            <a href="#" class="thumbnail">
+                <img data-src="holder.js/100%x180" src="{{ main_church.logo }}" alt="...">
+            </a>
+          </div>
+          <div class="col-xs-6 col-md-9">
+              <h2>{{main_church.name}}</h2>
+              {% trans 'CNPJ' %}:  <strong>{{ main_church.cnpj }}</strong><br />
+          </div>
+          {% else %}
+          <div class="col-xs-12 col-md-12">
+              <h2>{{main_church.name}}</h2>
+              {% trans 'CNPJ' %}:  <strong>{{ main_church.cnpj }}</strong><br />
+          </div>
+          {% endif%}
+
+      </div>
+      <div class="row">
+          <div class="col-xs-12 col-md-12">
+          </div>
+      </div>
+
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">{% trans 'Child churches' %} </div>
+  <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{% url 'church_child_add' %}" class="btn pull-right btn-primary">{% trans 'New Child' %}</a>
+
+                <table class="table" id="church-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{% trans 'Name' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% include 'includes/group-multiple-selection.html' with obj_class='church' %}
+  </div>
+</div>
+
+
+ {% if is_paginated %}
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li>
+                <a href="{% url 'member' %}?page={{ page_obj.previous_page_number }}" aria-label="{% trans 'Previous' %}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for page in paginator.page_range %}
+                <li  {% if page == page_obj.number %} class="active" {% endif %}><a href="{% url 'member' %}?page={{ page }}">{{ page }} {% if page == page_obj.number %} <span class="sr-only">(current)</span> {% endif %}</a></li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li>
+                <a href="{% url 'member' %}?page={{ page_obj.next_page_number }}" aria-label="{% trans 'Next' %}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+      </ul>
+    </nav>
+{% endif %}
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $.fn.dataTable.ext.errMode = 'throw';
+            var table = $('#church-table').DataTable({
+                serverSide: true,
+                ajax: '{% url 'church_list_table' %}',
+                 language: {
+                    "emptyTable":     "{% trans 'No data available in table'%}",
+                    "info":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
+                    "infoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
+                    "infoFiltered":   "({% trans 'filtered from _MAX_ total entries'%})",
+                    "infoPostFix":    "",
+                    "thousands":      ",",
+                    "lengthMenu":     "{% trans 'Show _MENU_ entries'%}",
+                    "loadingRecords": "{% trans 'Loading'%}...",
+                    "processing":     "{% trans 'Processing'%}...",
+                    "search":         "{% trans 'Search'%}:",
+                    "zeroRecords":    "{% trans 'No matching records found'%}",
+                    "paginate": {
+                        "first":      "{% trans 'First'%}",
+                        "last":       "{% trans 'Last'%}",
+                        "next":       "{% trans 'Next'%}",
+                        "previous":   "{% trans 'Previous'%}"
+                    },
+                    "aria": {
+                        "sortAscending": "{% trans 'activate to sort column ascending'%}",
+                        "sortDescending": "{% trans 'activate to sort column descending'%}"
+                    }
+                }
+            });
+
+
+            $('#member-table tbody').on( 'click', 'tr', function () {
+                $(this).toggleClass('selected');
+                if(table.rows('.selected').data().length > 0){
+                    $('#group-multiple-selection').slideDown();
+                }else{
+                    $('#group-multiple-selection').slideUp();
+                }
+            });
+
+
+        } );
+
+
+
+
+    </script>
+{% endblock %}
+
+{% block footer_media %}
+    {{ media_js }}
+    <script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/jquery.dataTables.min.js"></script>
+{% endblock %}

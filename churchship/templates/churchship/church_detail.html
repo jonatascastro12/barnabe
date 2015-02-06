@@ -1,0 +1,50 @@
+{% extends "dashboard_base.html" %}
+{% load i18n %}
+
+{% block page_title %}
+<h1 class="page-header">{% trans 'Church' %} <small>{{object.name}} - <a href="{% url 'church_edit' object.id %}">{% trans 'edit' %}</a></small></h1>
+{% endblock %}
+
+{% block page_content %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">{% trans 'Personal information' %}</div>
+  <div class="panel-body">
+      <div class="row">
+          <div class="col-xs-6 col-md-3">
+            <a href="#" class="thumbnail">
+              <img data-src="holder.js/100%x180" src="{{ object.logo}}" alt="...">
+            </a>
+          </div>
+          <div class="col-xs-6 col-md-9">
+              <h2>{{object.name}}</h2>
+              {% if object.church_mother %}{% trans 'Filial de' %}  <a href="{% url 'church_detail' object.church_mother.id %}">{{object.church_mother.name}}</a><br />{% endif %}
+              {% trans 'CNPJ' %}:  <strong>{{object.cnpj}}</strong><br />
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-xs-12 col-md-12">
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">{% trans 'Contact information' %}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                {% trans 'Email' %}:  <strong>{{object.email}}</strong><br/>
+                {% trans 'Address' %}:  <strong>{{object.address_line}}</strong><br/>
+                {% trans 'Neighborhood' %}:  <strong>{{object.neighborhood}}</strong><br/>
+                {% trans 'City' %}:  <strong>{{object.city}}</strong><br/>
+                {% trans 'State' %}:  <strong>{{object.state}}</strong><br/>
+                {% trans 'Phone' %} 1:  <strong>{{object.phone1}}</strong><br/>
+                {% trans 'Phone' %} 2:  <strong>{{object.phone2}}</strong><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

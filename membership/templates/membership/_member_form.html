@@ -1,6 +1,6 @@
 {% extends "dashboard_base.html" %}
 {% load i18n %}
-{% load bootstrap_form %}
+{% load bootstrap3 %}
 
 {% block page_title %}
 {% if form.instance.id %}
@@ -13,11 +13,28 @@
 
 {% block page_content %}
 
+{% bootstrap_messages %}
 <form class="form-horizontal" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ person_form|as_bootstrap  }}
-    {{ form|as_bootstrap  }}
-    {% buttons %}
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans "Personal information" %}</div>
+        <div class="panel-body">
+            {% bootstrap_form person_form layout='horizontal' %}
+        </div>
+    </div>
+     <div class="panel panel-default">
+        <div class="panel-heading">{% trans "Contact information" %}</div>
+        <div class="panel-body">
+            {% bootstrap_form person_contact_form layout='horizontal' %}
+        </div>
+    </div>
+     <div class="panel panel-default">
+        <div class="panel-heading">{% trans "Echlesiastic information" %}</div>
+        <div class="panel-body">
+            {% bootstrap_form form layout='horizontal' %}
+        </div>
+    </div>
+     {% buttons submit='Salvar' reset='Cancelar' layout='horizontal' %}{% endbuttons %}
 </form>
 
 <!-- Modal -->
@@ -47,7 +64,6 @@ $('input, select').change(function(){
     form_changed = true;
 })
 
-{% if form.instance.pk %}
 $('#discard-changes').click(function(){
     window.location = '{% url 'member_detail' form.instance.pk %}';
 });
@@ -58,8 +74,6 @@ $('button[type="reset"]').click(function(){
     else
         window.location = '{% url 'member_detail' form.instance.pk %}';
 });
-{% endif %}
-
 </script>
 
 {% endblock %}

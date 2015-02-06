@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-27 17:34-0200\n"
+"POT-Creation-Date: 2015-02-02 09:43-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,9 +33,184 @@ msgstr "Imagem deve ter resolução mínima de 512x512"
 msgid "Get request is not permitted."
 msgstr "GET request não é permitido"
 
-#: .\barnabe\views.py:24
+#: .\barnabe\views.py:29
 msgid "Overview"
 msgstr "Visão Geral"
+
+#: .\barnabe\views.py:30
+msgid "Churchship"
+msgstr "Igrejas"
+
+#: .\barnabe\views.py:32 .\churchship\models.py:50
+#: .\churchship\templates\churchship\church_detail.html:5
+#: .\churchship\templates\churchship\church_form.html:6
+#: .\churchship\templates\churchship\church_list.html:5
+msgid "Church"
+msgstr "Igreja"
+
+#: .\barnabe\views.py:35
+msgid "Membership"
+msgstr "Membresia"
+
+#: .\barnabe\views.py:37
+msgid "Members"
+msgstr "Membros"
+
+#: .\barnabe\views.py:40
+msgid "Discipleship"
+msgstr "Discipulado"
+
+#: .\churchship\models.py:22
+msgid "Church Type"
+msgstr "Tipo de Igreja"
+
+#: .\churchship\models.py:26
+#: .\churchship\templates\churchship\church_list.html:54
+msgid "Name"
+msgstr "Nome"
+
+#: .\churchship\models.py:29 .\churchship\models.py:30
+#: .\churchship\models.py:31
+#, fuzzy
+msgid "Special char not permitted."
+msgstr "GET request não é permitido"
+
+#: .\churchship\models.py:33 .\churchship\models.py:34
+#: .\churchship\templates\churchship\church_detail.html:42
+#: .\churchship\templates\churchship\church_detail.html:43
+msgid "Phone"
+msgstr "Telefone"
+
+#: .\churchship\templates\churchship\church_detail.html:5
+msgid "edit"
+msgstr "Editar"
+
+#: .\churchship\templates\churchship\church_detail.html:11
+msgid "Personal information"
+msgstr "Informações pessoais"
+
+#: .\churchship\templates\churchship\church_detail.html:21
+msgid "Filial de"
+msgstr ""
+
+#: .\churchship\templates\churchship\church_detail.html:22
+#: .\churchship\templates\churchship\church_list.html:26
+#: .\churchship\templates\churchship\church_list.html:31
+msgid "CNPJ"
+msgstr "CNPJ"
+
+#: .\churchship\templates\churchship\church_detail.html:33
+msgid "Contact information"
+msgstr "Informações de contato"
+
+#: .\churchship\templates\churchship\church_detail.html:37
+msgid "Email"
+msgstr "Email"
+
+#: .\churchship\templates\churchship\church_detail.html:38
+msgid "Address"
+msgstr "Endereço"
+
+#: .\churchship\templates\churchship\church_detail.html:39
+msgid "Neighborhood"
+msgstr "Bairro"
+
+#: .\churchship\templates\churchship\church_detail.html:40
+msgid "City"
+msgstr "Cidade"
+
+#: .\churchship\templates\churchship\church_detail.html:41
+msgid "State"
+msgstr "Estado"
+
+#: .\churchship\templates\churchship\church_list.html:15
+msgid "General information"
+msgstr "Informações gerais"
+
+#: .\churchship\templates\churchship\church_list.html:44
+msgid "Child churches"
+msgstr "Igrejas filiais"
+
+#: .\churchship\templates\churchship\church_list.html:48
+msgid "New Child"
+msgstr "Nova filial"
+
+#: .\churchship\templates\churchship\church_list.html:67
+msgid "Multiple selection action"
+msgstr "Ação da seleção"
+
+#: .\churchship\templates\churchship\church_list.html:73
+msgid "Remove"
+msgstr "Apagar"
+
+#: .\churchship\templates\churchship\church_list.html:75
+msgid "Print ID Cards"
+msgstr "Imprimir cartão"
+
+#: .\churchship\templates\churchship\church_list.html:85
+#: .\churchship\templates\churchship\church_list.html:125
+msgid "Previous"
+msgstr "Anterior"
+
+#: .\churchship\templates\churchship\church_list.html:95
+#: .\churchship\templates\churchship\church_list.html:124
+msgid "Next"
+msgstr "Próximo"
+
+#: .\churchship\templates\churchship\church_list.html:110
+msgid "No data available in table"
+msgstr "Nenhum registro disponível"
+
+#: .\churchship\templates\churchship\church_list.html:111
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Mostrando _START_ a _END_ de _TOTAL_ registros"
+
+#: .\churchship\templates\churchship\church_list.html:112
+msgid "Showing 0 to 0 of 0 entries"
+msgstr "Mostrando 0 a 0 de 0 registros"
+
+#: .\churchship\templates\churchship\church_list.html:113
+msgid "filtered from _MAX_ total entries"
+msgstr "filtrado de _MAX_ registros no total"
+
+#: .\churchship\templates\churchship\church_list.html:116
+msgid "Show _MENU_ entries"
+msgstr "Mostrando _MENU_ registros"
+
+#: .\churchship\templates\churchship\church_list.html:117
+#: .\templates\jcrop\jcrop_image_widget.html:36
+#: .\templates\jcrop\jcrop_image_widget.html:41
+#: .\templates\jcrop\jcrop_image_widget.html:46
+msgid "Loading"
+msgstr "Carregando"
+
+#: .\churchship\templates\churchship\church_list.html:118
+msgid "Processing"
+msgstr "Processando"
+
+#: .\churchship\templates\churchship\church_list.html:119
+msgid "Search"
+msgstr "Buscar"
+
+#: .\churchship\templates\churchship\church_list.html:120
+msgid "No matching records found"
+msgstr "Nenhum registro encontrado"
+
+#: .\churchship\templates\churchship\church_list.html:122
+msgid "First"
+msgstr "Primeiro"
+
+#: .\churchship\templates\churchship\church_list.html:123
+msgid "Last"
+msgstr "Último"
+
+#: .\churchship\templates\churchship\church_list.html:128
+msgid "activate to sort column ascending"
+msgstr "ordenar crescente"
+
+#: .\churchship\templates\churchship\church_list.html:129
+msgid "activate to sort column descending"
+msgstr "ordenar decrescente"
 
 #: .\templates\admin\base.html:30
 msgid "Welcome,"
@@ -65,8 +240,40 @@ msgstr "Barnabé :: Painel Adminsitrativo"
 msgid "Banabe"
 msgstr "Barnabé"
 
-#~ msgid "Name"
-#~ msgstr "Nome"
+#: .\templates\jcrop\jcrop_image_widget.html:12
+msgid "Larger size permitted: 500Kb"
+msgstr "Tamanho máximo permitido: 500Kb"
+
+#: .\templates\jcrop\jcrop_image_widget.html:37
+#, fuzzy
+msgid "Change photo"
+msgstr "Alterar senha"
+
+#: .\templates\jcrop\jcrop_image_widget.html:41
+#: .\templates\jcrop\jcrop_image_widget.html:46
+msgid "Successful!"
+msgstr "Sucesso!"
+
+#: .\templates\jcrop\jcrop_image_widget.html:42
+#, fuzzy
+msgid "Change crop"
+msgstr "Alterar senha"
+
+#: .\templates\jcrop\jcrop_image_widget.html:47
+#: .\templates\jcrop\jcrop_image_widget.html:273
+#: .\templates\jcrop\jcrop_image_widget.html:303
+msgid "Define photo"
+msgstr "Definir foto"
+
+#: .\templates\jcrop\jcrop_image_widget.html:137
+#, fuzzy
+msgid "Only .jpg extension is permitted."
+msgstr "Apenas formatos jpeg e png são permitidos."
+
+#: .\templates\jcrop\jcrop_image_widget.html:139
+#: .\templates\jcrop\jcrop_image_widget.html:204
+msgid "Alert"
+msgstr "Alerta"
 
 #~ msgid "Function"
 #~ msgstr "Função"

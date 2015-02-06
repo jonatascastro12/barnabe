@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import re
-from django.contrib.auth.models import AbstractUser, User
 from django.db.models import permalink
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.core.validators import RegexValidator
 from django.db import models
+from barnabe.forms import CropImageModelField
+from barnabe.utils import STATE_CHOICES
+from churchship.models import Church
 
 
 class MemberFunction(models.Model):
@@ -12,81 +15,71 @@ class MemberFunction(models.Model):
     def __str__(self):
         return self.name.encode('utf8')
 
-    title = models.CharField(max_length=60, verbose_name = 'Título abrev.', help_text = 'Ex: Dc')
-    name = models.CharField(max_length=255, verbose_name = 'Título', help_text = 'Ex: Diácono')
-    titleFemale = models.CharField(max_length=60, verbose_name = 'Título abrev. Feminino', help_text = 'Ex: Dcª')
-    nameFemale = models.CharField(max_length=255, verbose_name = 'Título Feminino', help_text = 'Ex: Diaconisa')
+    title = models.CharField(max_length=60, verbose_name='Título abrev.', help_text='Ex: Dc')
+    name = models.CharField(max_length=255, verbose_name='Título', help_text='Ex: Diácono')
+    title_female = models.CharField(max_length=60, verbose_name='Título abrev. Feminino', help_text = 'Ex: Dcª')
+    name_female = models.CharField(max_length=255, verbose_name='Título Feminino', help_text = 'Ex: Diaconisa')
 
     class Meta:
-        verbose_name = 'Função de membro' 
+        verbose_name = 'Função de membro'
         verbose_name_plural = 'Funções de membro'
 
 class Person(models.Model):
-
-    STATE_CHOICES = [
-        ('','Selecione um estado'),('AC','Acre'),('AL','Alagoas'),('AM','Amazonas'),('AP','Amapá'),('BA','Bahia'),
-        ('CE','Ceará'),('DF','Distrito Federal'),('ES','Espírito Santo'),('GO','Goiás'),('MA','Maranhão'),('MG','Minas Gerais'),
-        ('MS','Mato Grosso do Sul'),('MT','Mato Grosso'),('PA','Pará'),('PB','Paraíba'),('PE','Pernambuco'),('PI','Piauí'),
-        ('PR','Paraná'),('RJ','Rio de Janeiro'),('RN','Rio Grande do Norte'),('RO','Rondônia'),('RR','Roraima'),('RS','Rio Grande do Sul'),
-        ('SC','Santa Catarina'),('SP','São Paulo'),('SE','Sergipe'),('TO','Tocantins'),
-    ]
-
     def __str__(self):
         return self.name.encode('utf8')
 
-    name = models.CharField(max_length=255, verbose_name = 'Nome', validators=[RegexValidator(u'^[\'a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\s]+$', _(u'Special char not permitted.'), flags=re.L)])
-    cpf = models.CharField(max_length=14, verbose_name = 'CPF', validators=[RegexValidator('^[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$', _(u'You should type de 11 digits of your CPF.'))])
-    birthDt = models.DateField(verbose_name = 'Data de Nascimento')
-    gender = models.CharField(max_length='1', verbose_name = 'Sexo', choices = [('M','Masculino'), ('F','Feminino')])
+    timestamp = models.DateTimeField(default=timezone.now, auto_now_add=True)
+
+    name = models.CharField(max_length=255, verbose_name='Nome', validators=[RegexValidator(u'^[\'a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\s]+$', _(u'Special char not permitted.'), flags=re.L)])
+
+    photo = CropImageModelField(blank=True, upload_to='members/', verbose_name="Foto")
+
+    cpf = models.CharField(max_length=14, verbose_name='CPF')
+    rg = models.CharField(max_length=14, blank=True, null=True, verbose_name='RG')
+
+    birth_date = models.DateField(verbose_name='Data de Nascimento')
+    gender = models.CharField(max_length='1', verbose_name=_('Gender'), choices=[('M', _('Male')), ('F', _('Female'))])
+    blood_type = models.CharField(max_length='2', blank=True, null=True, verbose_name=_('Blood Type'), choices=[('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-','B-'), ('O+', 'O+'), ('O-', 'O-')])
+
     email = models.EmailField(max_length='200')
-    address_line = models.CharField(blank=True, max_length='300', verbose_name = 'Endereço', validators=[RegexValidator(u'^[\'a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ0-9,\.\s]+$', _(u'Special char not permitted.'))])
-    neighborhood = models.CharField(blank=True, max_length='200', verbose_name = 'Bairro', validators=[RegexValidator(u'^[\'a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\s]+$', _(u'Special char not permitted.'))])
-    city = models.CharField(blank=True, max_length='200', verbose_name = 'Cidade', validators=[RegexValidator(u'^[\'a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ0-9\s]+$', _(u'Special char not permitted.'))])
-    state = models.CharField(blank=True, max_length='2', verbose_name = 'UF',choices=STATE_CHOICES)
-    phone1 = models.CharField(blank=True, max_length='15', verbose_name = 'Telefone 1',)
-    phone2 = models.CharField(blank=True, max_length='15', verbose_name = 'Telefone 2',)
-    photo = models.ImageField(blank=True, upload_to='members/', verbose_name="Foto")
-    photo_original = models.CharField(null=True, max_length=255)
-    photo_crop_data = models.CharField(null=True, max_length=255)
+
+    address_line = models.CharField(blank=True, max_length='300', verbose_name=_('Address'), validators=[RegexValidator(u'^[\'a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ0-9,\.\s]+$', _(u'Special char not permitted.'))])
+    neighborhood = models.CharField(blank=True, max_length='200', verbose_name=_('Neighborhood'), validators=[RegexValidator(u'^[\'a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\s]+$', _(u'Special char not permitted.'))])
+    city = models.CharField(blank=True, max_length='200', verbose_name=_('City'), validators=[RegexValidator(u'^[\'a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ0-9\s]+$', _(u'Special char not permitted.'))])
+    state = models.CharField(blank=True, max_length='2', verbose_name='UF',choices=STATE_CHOICES)
+    zipcode = models.CharField(blank=True, null=True, max_length='10')
+    phone1 = models.CharField(blank=True, max_length='15', verbose_name='Telefone 1',)
+    phone2 = models.CharField(blank=True, max_length='15', verbose_name='Telefone 2',)
+
+    profession = models.CharField(blank=True, null=True, max_length='200', verbose_name=_('Profession'))
+    work_place = models.CharField(blank=True, null=True, max_length='200', verbose_name=_('Work place'))
+
+    father_name = models.CharField(max_length='255', blank=True, null=True, verbose_name=_('Father name'))
+    mother_name = models.CharField(max_length='255', blank=True, null=True, verbose_name=_('Mother name'))
+    marital_status = models.CharField(max_length='1', blank=True, null=True, choices=[('S', _('Single')), ('D', _('Divorced')), ('M', _('Married')), ('W', _('Widow')), ])
+    spouse = models.CharField(max_length='255', blank=True, null=True, verbose_name=_('Spouse'))
+    has_child = models.CharField(blank=True, null=True, max_length='1', verbose_name=_('Has Child?'), choices=[('Y', _('Yes')), ('N', _('No'))])
+    how_many_child = models.PositiveSmallIntegerField(default=0)
+
+    #TODO: Spouse - Foreign Key
+    #TODO: Children - ManyToManyField or Foreing Key in a ChildrenObject
 
     class Meta:
-        verbose_name = 'Pessoa'
-
-
-class ChurchType(models.Model):
-    name = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = _('Church Type')
-
-
-class BarnabeUser(models.Model):
-    user = models.OneToOneField(User)
-
-class Church(models.Model):
-    name = models.CharField(max_length=255, verbose_name=_('Name'))
-    cnpj = models.CharField(max_length=20, verbose_name='CNPJ', blank=True)
-    phone1 = models.CharField(blank=True, max_length=15, verbose_name=_('Phone')+' 1')
-    phone2 = models.CharField(blank=True, max_length=15, verbose_name=_('Phone')+' 2')
-    type = models.ForeignKey(ChurchType)
-    church_mother = models.ForeignKey('self', null=True, blank=True)
-    barnabe_user = models.ForeignKey(BarnabeUser)
-
-    def __str__(self):
-        return self.name.encode('utf8')
-
-    class Meta:
-        verbose_name = _('Church')
+        verbose_name = _('Person')
 
 class Member(models.Model):
 
-    SITUATION_CHOICES = [('A','Ativo'), ('I','Inativo')]
+    SITUATION_CHOICES = [('A', _('Active')), ('I', _('Inactive'))]
 
     def __str__(self):
         return self.person.name.encode('utf8')
 
-    baptismDt = models.DateField(verbose_name='Data de Batismo')
-    memberFunction = models.ForeignKey(MemberFunction, verbose_name="Função")
+    previous_church = models.CharField(max_length='255', blank=True, null=True, verbose_name=_('Previous church'))
+    previous_function = models.CharField(max_length='255', blank=True, null=True, verbose_name=_('Previous function'))
+    baptism_date = models.DateField(verbose_name=_('Baptism date'))
+    baptism_place = models.CharField(max_length='255',blank=True, null=True, verbose_name=_('Baptism place'))
+    admission_date = models.DateField(blank=True, null=True, verbose_name=_('Admission date'))
+    member_function = models.ForeignKey(MemberFunction, verbose_name="Função")
     situation = models.CharField(max_length=7, verbose_name="Situação", choices=SITUATION_CHOICES)
     church = models.ForeignKey(Church)
     person = models.OneToOneField(Person, null=True, verbose_name='Pessoa')
@@ -97,7 +90,6 @@ class Member(models.Model):
 
     class Meta:
         verbose_name = _('Member')
-
 
 
 '''

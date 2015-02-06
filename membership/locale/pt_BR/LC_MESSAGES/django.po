@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-27 17:34-0200\n"
+"POT-Creation-Date: 2015-02-02 09:43-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,77 +17,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\membership\models.py:37 .\membership\models.py:42
-#: .\membership\models.py:43 .\membership\models.py:44
+#: .\membership\forms.py:18 .\membership\forms.py:34
+msgid "Zipcode"
+msgstr "CEP"
+
+#: .\membership\forms.py:19 .\membership\forms.py:35
+#, fuzzy
+msgid "Phone 1"
+msgstr "Telefone 1"
+
+#: .\membership\forms.py:20 .\membership\forms.py:36
+#, fuzzy
+msgid "Phone 2"
+msgstr "Telefone 2"
+
+#: .\membership\models.py:30 .\membership\models.py:35
+#: .\membership\models.py:36 .\membership\models.py:37
 msgid "Special char not permitted."
 msgstr "Não é permitido caraceteres especiais."
 
-#: .\membership\models.py:38
-msgid "You should type de 11 digits of your CPF."
-msgstr "Você deve digitar os 11 dígitos do seu CPF."
-
-#: .\membership\models.py:60
-msgid "Church Type"
-msgstr "Tipo de igreja"
-
-#: .\membership\models.py:67
-#: .\membership\templates\membership\member_list.html:23
-msgid "Name"
-msgstr "Nome"
-
-#: .\membership\models.py:69 .\membership\models.py:70
-#: .\membership\templates\membership\member_detail.html:47
-#: .\membership\templates\membership\member_detail.html:48
-msgid "Phone"
-msgstr "Telefone"
-
-#: .\membership\models.py:79
-msgid "Church"
-msgstr "Igreja"
-
-#: .\membership\models.py:99
+#: .\membership\models.py:65
 #: .\membership\templates\membership\member_list.html:5
 msgid "Member"
 msgstr "Membro"
-
-#: .\membership\templates\jcrop\jcrop_image_widget.html:6
-msgid "Larger size permitted: 500Kb"
-msgstr "Tamanho máximo permitido: 500Kb"
-
-#: .\membership\templates\jcrop\jcrop_image_widget.html:30
-#: .\membership\templates\jcrop\jcrop_image_widget.html:35
-#: .\membership\templates\jcrop\jcrop_image_widget.html:40
-#: .\membership\templates\membership\member_list.html:70
-msgid "Loading"
-msgstr "Carregando"
-
-#: .\membership\templates\jcrop\jcrop_image_widget.html:31
-msgid "Change photo"
-msgstr "Alterar foto"
-
-#: .\membership\templates\jcrop\jcrop_image_widget.html:35
-#: .\membership\templates\jcrop\jcrop_image_widget.html:40
-msgid "Successful!"
-msgstr "Sucesso!"
-
-#: .\membership\templates\jcrop\jcrop_image_widget.html:36
-msgid "Change crop"
-msgstr "Cortar imagem"
-
-#: .\membership\templates\jcrop\jcrop_image_widget.html:41
-#: .\membership\templates\jcrop\jcrop_image_widget.html:265
-#: .\membership\templates\jcrop\jcrop_image_widget.html:295
-msgid "Define photo"
-msgstr "Definir foto"
-
-#: .\membership\templates\jcrop\jcrop_image_widget.html:131
-msgid "Only .jpg extension is permitted."
-msgstr "Apenas o formato .jpeg é permitido"
-
-#: .\membership\templates\jcrop\jcrop_image_widget.html:133
-#: .\membership\templates\jcrop\jcrop_image_widget.html:197
-msgid "Alert"
-msgstr "Alerta"
 
 #: .\membership\templates\membership\member_detail.html:5
 #: .\membership\templates\membership\member_form.html:7
@@ -95,10 +47,6 @@ msgstr "Alerta"
 #: .\membership\templates\membership\member_list.html:5
 msgid "Members"
 msgstr "Membros"
-
-#: .\membership\templates\membership\member_detail.html:5
-msgid "Details of"
-msgstr "Detalhes de"
 
 #: .\membership\templates\membership\member_detail.html:5
 msgid "edit"
@@ -146,6 +94,11 @@ msgstr "Cidade"
 msgid "State"
 msgstr "UF"
 
+#: .\membership\templates\membership\member_detail.html:47
+#: .\membership\templates\membership\member_detail.html:48
+msgid "Phone"
+msgstr "Telefone"
+
 #: .\membership\templates\membership\member_form.html:7
 msgid "Editing "
 msgstr "Editando"
@@ -159,67 +112,120 @@ msgstr "Novo"
 msgid "Echlesiastic information"
 msgstr "Dados eclesiásticos"
 
-#: .\membership\templates\membership\member_list.html:24
+#: .\membership\templates\membership\member_list.html:20
+msgid "Name"
+msgstr "Nome"
+
+#: .\membership\templates\membership\member_list.html:21
 msgid "Function"
 msgstr "Função"
 
-#: .\membership\templates\membership\member_list.html:38
-#: .\membership\templates\membership\member_list.html:78
+#: .\membership\templates\membership\member_list.html:35
+msgid "Multiple selection action"
+msgstr "Ação de seleção múltipla"
+
+#: .\membership\templates\membership\member_list.html:41
+msgid "Remove"
+msgstr "Apagar"
+
+#: .\membership\templates\membership\member_list.html:43
+msgid "Print ID Cards"
+msgstr "Imprimir cartão"
+
+#: .\membership\templates\membership\member_list.html:53
+#: .\membership\templates\membership\member_list.html:93
 msgid "Previous"
 msgstr "Anterior"
 
-#: .\membership\templates\membership\member_list.html:48
-#: .\membership\templates\membership\member_list.html:77
+#: .\membership\templates\membership\member_list.html:63
+#: .\membership\templates\membership\member_list.html:92
 msgid "Next"
 msgstr "Próximo"
 
-#: .\membership\templates\membership\member_list.html:63
+#: .\membership\templates\membership\member_list.html:78
 msgid "No data available in table"
 msgstr "Nenhum registro encontrado"
 
-#: .\membership\templates\membership\member_list.html:64
+#: .\membership\templates\membership\member_list.html:79
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr "Mostrando _START_ a _END_ de _TOTAL_ registros"
 
-#: .\membership\templates\membership\member_list.html:65
+#: .\membership\templates\membership\member_list.html:80
 msgid "Showing 0 to 0 of 0 entries"
 msgstr "Mostrando 0 a 0 de 0 registros"
 
-#: .\membership\templates\membership\member_list.html:66
+#: .\membership\templates\membership\member_list.html:81
 msgid "filtered from _MAX_ total entries"
 msgstr "filtrado de _MAX_ registros no total"
 
-#: .\membership\templates\membership\member_list.html:69
+#: .\membership\templates\membership\member_list.html:84
 msgid "Show _MENU_ entries"
 msgstr "Mostrando _MENU_ registros"
 
-#: .\membership\templates\membership\member_list.html:71
+#: .\membership\templates\membership\member_list.html:85
+msgid "Loading"
+msgstr "Carregando"
+
+#: .\membership\templates\membership\member_list.html:86
 msgid "Processing"
 msgstr "Processando"
 
-#: .\membership\templates\membership\member_list.html:72
+#: .\membership\templates\membership\member_list.html:87
 msgid "Search"
 msgstr "Buscar"
 
-#: .\membership\templates\membership\member_list.html:73
+#: .\membership\templates\membership\member_list.html:88
 msgid "No matching records found"
 msgstr "Nenhum registro encontrado"
 
-#: .\membership\templates\membership\member_list.html:75
+#: .\membership\templates\membership\member_list.html:90
 msgid "First"
 msgstr "Primeiro"
 
-#: .\membership\templates\membership\member_list.html:76
+#: .\membership\templates\membership\member_list.html:91
 msgid "Last"
 msgstr "Último"
 
-#: .\membership\templates\membership\member_list.html:81
+#: .\membership\templates\membership\member_list.html:96
 msgid "activate to sort column ascending"
 msgstr "Ordenar crescente"
 
-#: .\membership\templates\membership\member_list.html:82
+#: .\membership\templates\membership\member_list.html:97
 msgid "activate to sort column descending"
 msgstr "Ordenar decrescente"
+
+#~ msgid "You should type de 11 digits of your CPF."
+#~ msgstr "Você deve digitar os 11 dígitos do seu CPF."
+
+#~ msgid "Church Type"
+#~ msgstr "Tipo de igreja"
+
+#~ msgid "Church"
+#~ msgstr "Igreja"
+
+#~ msgid "Larger size permitted: 500Kb"
+#~ msgstr "Tamanho máximo permitido: 500Kb"
+
+#~ msgid "Change photo"
+#~ msgstr "Alterar foto"
+
+#~ msgid "Successful!"
+#~ msgstr "Sucesso!"
+
+#~ msgid "Change crop"
+#~ msgstr "Cortar imagem"
+
+#~ msgid "Define photo"
+#~ msgstr "Definir foto"
+
+#~ msgid "Only .jpg extension is permitted."
+#~ msgstr "Apenas o formato .jpeg é permitido"
+
+#~ msgid "Alert"
+#~ msgstr "Alerta"
+
+#~ msgid "Details of"
+#~ msgstr "Detalhes de"
 
 #, fuzzy
 #~ msgid "New Member"

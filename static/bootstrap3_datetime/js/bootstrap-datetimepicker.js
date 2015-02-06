@@ -59,7 +59,7 @@
             useMinutes: true,
             useSeconds: false,
             minuteStepping: 1,
-            startDate: new pMoment({ y: 1970 }),
+            startDate: new pMoment({ y: 1890 }),
             endDate: new pMoment().add(50, "y"),
             collapse: true,
             language: pMoment.lang(),

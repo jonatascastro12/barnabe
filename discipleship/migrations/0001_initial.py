@@ -31,6 +31,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'verbose_name': 'Discipulador',
+                'verbose_name_plural': 'Discipuladores',
             },
             bases=(models.Model,),
         ),
@@ -38,27 +39,28 @@ class Migration(migrations.Migration):
             name='Meeting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('datetime', models.DateTimeField()),
-                ('description', models.TextField()),
-                ('disciple', models.ForeignKey(to='discipleship.Disciple')),
-                ('discipler', models.ForeignKey(to='discipleship.Discipler')),
-                ('monitors', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
+                ('datetime', models.DateTimeField(verbose_name=b'Hor\xc3\xa1rio')),
+                ('description', models.TextField(verbose_name=b'Descri\xc3\xa7\xc3\xa3o')),
+                ('disciple', models.ForeignKey(verbose_name=b'Discipulo', to='discipleship.Disciple')),
+                ('discipler', models.ForeignKey(verbose_name=b'Discipulador', to='discipleship.Discipler')),
+                ('monitors', models.ManyToManyField(to=settings.AUTH_USER_MODEL, verbose_name=b'Monitor')),
             ],
             options={
                 'verbose_name': 'Reuni\xe3o',
+                'verbose_name_plural': 'Reuni\xf5es',
             },
             bases=(models.Model,),
         ),
         migrations.AddField(
             model_name='disciple',
             name='discipler',
-            field=models.ForeignKey(to='discipleship.Discipler'),
+            field=models.ForeignKey(verbose_name=b'Discipulador', to='discipleship.Discipler'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='disciple',
             name='member',
-            field=models.ForeignKey(to='membership.Member'),
+            field=models.ForeignKey(verbose_name=b'Membro', to='membership.Member'),
             preserve_default=True,
         ),
     ]

@@ -62,14 +62,14 @@ body {
 .nav-sidebar > .active > a,
 .nav.subnav > .active > a,
 .nav-sidebar > .active > a:hover{
-  color: #fff;
-  background-color: #428bca !important;
+  font-weight: bold;
+  color: rgb(29, 104, 158);
 }
 
 .nav-sidebar > .active-app > a,
 .nav-sidebar > .active-app > a:hover{
   color: #fff;
-  background-color: #2F3F67 !important;
+  background-color: #428bca !important;
 }
 
 .nav.nav-sidebar li{
@@ -78,13 +78,17 @@ body {
 }
 
 .nav.subnav{
+  max-height: 0;
   height: 0;
   overflow-y: hidden;
+  transition: max-height 1s ease-out;
 }
 
 .nav.subnav.open{
+  max-height: 500px;
   height: auto;
   border-top: 1px solid #C8C8C8;
+  transition: max-height 1s ease-in;
 }
 
 .nav.subnav.open>li>a{
@@ -146,5 +150,4 @@ span.edit-link {
 /*members_list*/
 #group-multiple-selection{
     margin-bottom: 15px;
-    display: none;
 }

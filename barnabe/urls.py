@@ -10,10 +10,12 @@ urlpatterns = patterns('',
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^login/', views.login, name='login'),
     url(r'^logout/', 'barnabe.views.logout', name='logout'),
-    url(r'^dashboard/$', 'barnabe.views.dashboard', name="dashboard_index"),
+    url(r'^dashboard/overview$', 'barnabe.views.dashboard', name="dashboard_index"),
     url(r'^dashboard/profile$', 'barnabe.views.profile', name="user_profile"),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^dashboard/membership', include('membership.urls'),)
+    url(r'^dashboard/image_upload', 'barnabe.views.image_upload', name="image_upload"),
+    url(r'^dashboard/membership', include('membership.urls'),),
+    url(r'^dashboard/churchship', include('churchship.urls'),),
 )
 
 if settings.DEBUG :

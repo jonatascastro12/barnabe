@@ -1,10 +1,6 @@
 from django.forms.widgets import Widget, FileInput, ClearableFileInput, CheckboxInput, FILE_INPUT_CONTRADICTION
 from django.template.context import Context
 from django.template.loader import get_template
-from django.core.files.storage import default_storage
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from StringIO import StringIO
-from PIL import Image
 try:
     import json
 except ImportError:
@@ -13,7 +9,7 @@ from barnabe.settings import MEDIA_URL
 from django.conf import settings
 
 class JCropImageWidget(ClearableFileInput):
-    ratio = '0'
+    ratio = '1'
     jquery_alias = None
 
     def __init__(self, *args, **kwargs):

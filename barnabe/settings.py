@@ -40,9 +40,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sorl.thumbnail',
-    'bootstrap3',
+    'django_localflavor_br',
+    'bootstrap_form',
     'bootstrap3_datetime',
     'nested_inline',
+    'churchship',
     'membership',
     'discipleship',
 )
@@ -119,3 +121,5 @@ STATICFILES_DIRS = (
 
 MEDIA_ROOT = os.path.dirname(os.path.dirname(__file__))+ '/uploaded_images/'
 MEDIA_URL = '/uploaded_images/'
+
+DEFAULT_IMAGE = '/static/images/default.jpg'

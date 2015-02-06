@@ -1,5 +1,6 @@
 {% extends "dashboard_base.html" %}
 {% load i18n %}
+{% load bootstrap_form %}
 
 {% block page_title %}
 <h1 class="page-header">{% trans 'Members' %} <a href="{% url 'member_add' %}" class="btn pull-right btn-primary">{% trans 'New' %} {% trans 'Member' %}</a></h1>
@@ -11,8 +12,41 @@
 {% endblock %}
 
 {% block page_content %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                  <input id="member-search" type="text" class="form-control" controls="member-table" placeholder="Pesquisar">
+                </div>
+            </form>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="btn-group pull-right" role="group" aria-label="">
+                <a href="{% url 'members' %}?layout=thumb" class="btn btn-default navbar-btn {% if view.request.GET.layout == 'thumb' %}active{% endif %}"><span style="font-size:12px;" class="glyphicon glyphicon-th"></span></a>
+                <a href="{% url 'members' %}" class="btn btn-default navbar-btn {% if not view.request.GET.layout %}active{% endif %}"><span style="font-size:12px;" class="glyphicon glyphicon-list"></span></a>
+            </div>
+        </div>
+    </div>
+</nav>
 <div class="row">
     <div class="col-md-12">
+        {% if layout == 'thumb' %}
+            {% for chunk in object_list|chunks:6 %}
+                <div class="row">
+                {% for member in chunk%}
+                    <div class="col-xs-4 col-md-2">
+                        <a href="{{ member.get_absolute_url }}" class="thumbnail">
+                            <img src="{{ member.person.photo }}" alt="...">
+                            <div class="caption">
+                                <p align="center">{{ member.person.name|abbreviate }}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
+            {% endfor %}
+        {% else %}
         <table class="table" id="member-table">
             <thead>
                 <tr>
@@ -27,40 +61,47 @@
             {# endfor #}
             </tbody>
         </table>
+        {% endif %}
     </div>
 </div>
-<div class="row" id="group-multiple-selection">
-    <div class="col-md-12">
-        <div class="btn-group">
-          <button type="button" class="btn btn-default">{% trans 'Multiple selection action' %}</button>
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <span class="caret"></span>
-            <span class="sr-only">Toggle Dropdown</span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'Remove' %}</a></li>
-            <li class="divider"></li>
-            <li><a href="#"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> {% trans 'Print ID Cards' %}</a></li>
-          </ul>
-        </div>
-    </div>
-</div>
- {% if is_paginated %}
+
+{% if layout != 'thumb' %}
+    {% include 'includes/group-multiple-selection.html' with obj_class='member' %}
+{% endif %}
+<div id="remove-members-prompt" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{% trans 'Confirm deletion' %}</h4>
+      </div>
+      <div class="modal-body">
+        <p id="remove-members-confirm-message">{% trans "Do you really want to delete members" %}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'No' %}</button>
+        <button id="remove-members-confirm" type="button" class="btn btn-primary">{% trans 'Confirm' %}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{% if is_paginated and layout == 'thumb'%}
     <nav>
-        <ul class="pagination">
+        <ul class="pagination pull-right">
             {% if page_obj.has_previous %}
             <li>
-                <a href="{% url 'member' %}?page={{ page_obj.previous_page_number }}" aria-label="{% trans 'Previous' %}">
+                <a href="{% url 'members' %}?layout=thumb&page={{ page_obj.previous_page_number }}" aria-label="{% trans 'Previous' %}">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             {% endif %}
             {% for page in paginator.page_range %}
-                <li  {% if page == page_obj.number %} class="active" {% endif %}><a href="{% url 'member' %}?page={{ page }}">{{ page }} {% if page == page_obj.number %} <span class="sr-only">(current)</span> {% endif %}</a></li>
+                <li  {% if page == page_obj.number %} class="active" {% endif %}><a href="{% url 'members' %}?layout=thumb&page={{ page }}">{{ page }} {% if page == page_obj.number %} <span class="sr-only">(current)</span> {% endif %}</a></li>
             {% endfor %}
             {% if page_obj.has_next %}
             <li>
-                <a href="{% url 'member' %}?page={{ page_obj.next_page_number }}" aria-label="{% trans 'Next' %}">
+                <a href="{% url 'members' %}?layout=thumb&page={{ page_obj.next_page_number }}" aria-label="{% trans 'Next' %}">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
@@ -69,10 +110,51 @@
     </nav>
 {% endif %}
     <script type="text/javascript">
+        function getCookie(name) {
+            var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = $.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        function sameOrigin(url) {
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
         $(document).ready( function () {
             $.fn.dataTable.ext.errMode = 'throw';
             var table = $('#member-table').DataTable({
                 serverSide: true,
+                dom: "rtip",
                 ajax: '{% url 'member_list_table' %}',
                  language: {
                     "emptyTable":     "{% trans 'No data available in table'%}",
@@ -99,22 +181,59 @@
                 }
             });
 
+            $('#member-search').on( 'keyup', function () {
+                table.search( this.value ).draw();
+            });
 
             $('#member-table tbody').on( 'click', 'tr', function () {
                 $(this).toggleClass('selected');
-                if(table.rows('.selected').data().length > 0){
-                    $('#group-multiple-selection').slideDown();
+                if ($('tr.selected').size() == 0){
+                    $('button#multiple-selection-action').attr('disabled','');
+                    $('button#multiple-selection-action-toggle').attr('disabled','');
                 }else{
-                    $('#group-multiple-selection').slideUp();
+                    $('button#multiple-selection-action').removeAttr('disabled');
+                    $('button#multiple-selection-action-toggle').removeAttr('disabled');
                 }
+            });
+            var erase_objs = [];
+            $('#remove-members').click(function(){
+                erase_objs = [];
+                $('tr.selected').each(function(i,e){
+                    erase_objs.push({
+                        'id': $(e).find('td a').first().attr('obj_id'),
+                        'name': $(e).find('span[attr_name="person.name"]').first().text()
+                    });
+                });
+                console.log(erase_objs);
+                if (erase_objs.length > 0){
+                    var members_name = [];
+                    for (var i=0; i < erase_objs.length; i++) members_name.push(erase_objs[i].name);
+                    var message = "{% trans 'Do you really want to delete the members:' %} " + members_name.join(', ')+"?"
+                    $('#remove-members-confirm-message').text(message);
+                    $('#remove-members-prompt').modal();
+                }
+            });
+
+            $('#remove-members-confirm').click(function(){
+                var members_id = [];
+                for (var i = 0; i < erase_objs.length; i++) members_id.push(erase_objs[i].id);
+                $.ajax({
+                    url: '{% url 'members' %}',
+                    type: 'delete',
+                    data: JSON.stringify({'id': members_id}),
+                    success: function(data){
+                        $('#remove-members-prompt').modal('hide');
+                        Dashboard.show_message("{% trans 'Deleting members...' %}", 'warning');
+                        window.location = '{% url 'members' %}';
+                    },error: function(){
+                        $('#remove-members-prompt').modal('hide');
+                        Dashboard.show_message("{% trans 'Some error occurred.' %}", 'error');
+                    }
+                })
             });
 
 
         } );
-
-
-
-
     </script>
 {% endblock %}
 

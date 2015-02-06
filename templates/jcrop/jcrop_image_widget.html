@@ -3,6 +3,12 @@
 <input type="hidden" id="helper_input" />
 <input type="hidden" name="{{ input_name }}_original" id="id_{{ input_name }}_original" value="{{ image_original_value }}"  />
 <input type="hidden" name="{{ input_name }}_crop_data" id="id_{{ input_name }}_crop_data" value="{{ image_crop_data_value }}" />
+{% if image_value and image_value.path|length > 0  %}
+    <input type="hidden" name="{{ input_name }}" id="id_{{ input_name }}" value="{{ image_value }}" />
+{% else %}
+    <input type="file" name="{{ input_name }}" id="id_{{ input_name }}" value="{{ image_value }}" />
+{% endif %}
+
 <p id="{{input_name}}-help-block" class="help-block">{% trans 'Larger size permitted: 500Kb' %} </p>
 <div class="row">
     <div class="col-xs-12">
@@ -16,11 +22,10 @@
 <div class="row">
     <div class="col-xs-12">
         <div id="image-upload-panel-{{ input_name}}" class="panel" style="display:none">
-            {% if image_value %}
-                <span class="{{ input_name }} jcrop_panel">
-                  <img src="{{ image_value }}" class="img-responsive" id="jcrop_target_{{ input_name }}" />
-                </span>
-
+            {% if image_value and image_value.path|length > 0  %}
+            <span class="{{ input_name }} jcrop_panel">
+              <img src="{{ image_value }}" class="img-responsive" id="jcrop_target_{{ input_name }}" />
+            </span>
             {% endif %}
         </div>
     </div>
@@ -58,31 +63,31 @@ $(function () {
                 }
             }
             return cookieValue;
-        }
-        var csrftoken = getCookie('csrftoken');
+    }
+    var csrftoken = getCookie('csrftoken');
 
-        function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
 
-        function sameOrigin(url) {
-            var host = document.location.host; // host + port
-            var protocol = document.location.protocol;
-            var sr_origin = '//' + host;
-            var origin = protocol + sr_origin;
-            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-                !(/^(\/\/|http:|https:).*/.test(url));
-        }
+    function sameOrigin(url) {
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
 
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
-        });
+        }
+    });
 
     function init_jcrop_{{ input_name }}(img, crop_data){
         $(img).Jcrop({
@@ -104,8 +109,7 @@ $(function () {
             $('#change-photo-{{input_name}}').show();
         });
     }
-
-    {% if image_value %}
+    {% if image_value and image_value.path|length > 0  %}
         $('#image-upload-panel-{{input_name}}').show();
         $('#change-photo-{{input_name}}').show();
         $('#change-crop-{{input_name}}').show();
@@ -145,9 +149,10 @@ $(function () {
 
         var form = new FormData();
         form.append('photo',event.target.files[0]);
+        form.append('upload_to','{{ upload_to }}');
 
         $.ajax({
-            url:'/dashboard/membership/members/image_upload',
+            url:'/dashboard/image_upload',
             data: form,
             type: 'POST',
             contentType: false,
@@ -223,9 +228,10 @@ $(function () {
         var form = new FormData();
         form.append('{{ input_name }}_crop_data',$('#id_{{ input_name}}_crop_data').val() );
         form.append('{{ input_name }}_original',$('#id_{{ input_name}}_original').val() );
+        form.append('upload_to','{{ upload_to }}' );
 
         $.ajax({
-            url:'/dashboard/membership/members/image_upload',
+            url:'/dashboard/image_upload',
             data: form,
             type: 'POST',
             contentType: false,
@@ -300,47 +306,5 @@ $(function () {
         $('#change-photo-{{input_name}}').hide();
         $('#change-crop-{{input_name}}').hide();
     });
-
-
-    /* var jcrop_api, boundx, boundy;
-
-    var update_input = function(c) {
-        $.extend(c, {
-            image_width: $('#jcrop_target_{{ input_name }}').width(),
-            image_height: $('#jcrop_target_{{ input_name }}').height()
-        })
-        $("#id_{{ input_name }}_crop_data").val(JSON.stringify(c))
-    };
-
-    var update_preview = function(c)
-    {
-        var $preview_img = $("#jcrop_preview_{{ input_name }}"),
-            $preview_pane = $("#jcrop_preview_{{ input_name }}").parent();
-        xsize = $preview_pane.width();
-        ysize = $preview_pane.height();
-        if (parseInt(c.w) > 0) {
-            var rx = xsize / c.w;
-            var ry = ysize / c.h;
-            $preview_img.css({
-                width: Math.round(rx * boundx) + 'px',
-                height: Math.round(ry * boundy) + 'px',
-                marginLeft: '-' + Math.round(rx * c.x) + 'px',
-                marginTop: '-' + Math.round(ry * c.y) + 'px'
-            });
-        }
-    };
-
-    $('#jcrop_target_{{ input_name }}').Jcrop({
-        aspectRatio: {{ ratio }},
-        onChange: update_preview,
-        onSelect: update_input,
-        minSize: [ {% firstof min_x 1 %}, {% firstof min_y 1 %} ]
-    }, function() {
-        var bounds = this.getBounds();
-        boundx = bounds[0];
-        boundy = bounds[1];
-        jcrop_api = this;
-    });
-    update_input(); */
 });
 </script>
