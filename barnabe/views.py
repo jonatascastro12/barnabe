@@ -27,14 +27,14 @@ class DashboardMenu():
 
     menu = [
         {'name': 'overview', 'verbose_name': _('Overview'), 'link': '/overview'},
-        {'name': 'churchship', 'verbose_name': _('Churchship'), 'children':
+        {'name': 'churchship', 'verbose_name': _('Churchship'), 'perm': 'churchship', 'children':
             [
-                {'name': 'chuch', 'verbose_name': _('Church'), 'link': '/churchship/church'}
+                {'name': 'chuch', 'verbose_name': _('Church'), 'link': '/churchship/church', 'perm': 'churchship.change_church'}
             ]
         },
-        {'name': 'membership', 'verbose_name': _('Membership'), 'children':
+        {'name': 'membership', 'verbose_name': _('Membership'), 'perm': 'membership', 'children':
             [
-                {'name': 'members', 'verbose_name': _('Members'), 'link': '/membership/members'},
+                {'name': 'members', 'verbose_name': _('Members'), 'link': '/membership/members', 'perm': 'membership.change_member'},
             ]
         },
         {'name': 'discipleship', 'verbose_name': _('Discipleship'),}
@@ -46,14 +46,16 @@ class DashboardMenu():
             active = 'active-app' if ('link' in item and '/dashboard' + item['link'] in request.path_info) or (item['name'] in request.path_info) else ''
             link = ('/dashboard' + item['link'] if 'link' in item else '#')
             verbose_name = item['verbose_name'] if 'verbose_name' in item else item['name']
-            output += u'<li class="{0}"><a href="{1}">{2}</a>'.format(active, link, verbose_name)
+            if(not 'perm' in item) or ('perm' in item and request.user.has_module_perms(item['perm'])):
+                output += u'<li class="{0}"><a href="{1}">{2}</a>'.format(active, link, verbose_name)
             if 'children' in item:
                 output += u'<ul class="nav subnav{0}">'.format(' open' if active != '' else '')
                 for child_item in item['children']:
                     link = ('/dashboard' + child_item['link'] if 'link' in child_item else '#')
                     active = 'active' if ('link' in child_item and ('/dashboard' + child_item['link']) in request.path_info) else ''
                     current = u'<span class="sr-only">(current)</span>' if True else ''
-                    output += u'<li class="{0}"><a href="{1}">{2}{3}</a></li>'.format(active, link, child_item['verbose_name'], current)
+                    if request.user.has_perm(child_item['perm']):
+                        output += u'<li class="{0}"><a href="{1}">{2}{3}</a></li>'.format(active, link, child_item['verbose_name'], current)
                 output += u'</ul>'
                 output += u'</li>'
         output += u'</ul>'

@@ -17,7 +17,7 @@
             </a>
           </div>
           <div class="col-xs-6 col-md-9">
-              <h2>{{object.person.name}}</h2>
+              <h2>{{object.person.name}} <br/><small>{{ object.get_member_function }}</small></h2>
               {% trans 'CPF' %}:  <strong>{{object.person.cpf}}</strong><br />
               {% trans 'Born date' %}:  <strong>{{object.person.birthDt}}</strong><br />
               {% trans 'Gender' %}:  <strong>{{object.person.gender}}</strong>

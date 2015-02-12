@@ -84,6 +84,12 @@ class Member(models.Model):
     church = models.ForeignKey(Church)
     person = models.OneToOneField(Person, null=True, verbose_name='Pessoa')
 
+    def get_member_function(self):
+        if self.person.gender == 'F':
+            return self.member_function.name_female
+        else:
+            return self.member_function.name
+
     @permalink
     def get_absolute_url(self):
         return ('member_detail', (), {'pk': self.id})

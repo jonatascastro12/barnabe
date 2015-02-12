@@ -42,8 +42,8 @@ class MemberListView(DashboardListView):
 
 class MemberListTableView(ListView, BaseDatatableView):
     model = models.Member
-    columns = ['id', 'person.name', 'member_function.name']
-    order_columns = ['id', 'person.name', 'member_function.name']
+    columns = ['id', 'person.name', 'get_member_function']
+    order_columns = ['id', 'person.name', 'get_member_function']
 
     def filter_queryset(self, qs):
         """ If search['value'] is provided then filter all searchable columns using istartswith
@@ -155,7 +155,7 @@ class MemberUpdateView(DashboardUpdateView):
             return self.form_invalid(member_form)
 
     def form_valid(self, form, person_form):
-        form.save(commit=False)
+        form.save()
         person_form.instance.pk = form.instance.person.pk
         person_form.save()
         messages.success(self.request, MESSAGES['success']['member_update'])
