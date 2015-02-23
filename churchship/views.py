@@ -7,7 +7,6 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from barnabe.views import DashboardUpdateView, DashboardListView, DashboardFormView, DashboardDetailView
 from churchship import models
 from churchship.forms import ChurchForm
-from churchship.models import Church, BarnabeUser
 
 
 class ChurchListView(DashboardListView):

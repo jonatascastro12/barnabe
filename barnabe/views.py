@@ -27,9 +27,15 @@ class DashboardMenu():
 
     menu = [
         {'name': 'overview', 'verbose_name': _('Overview'), 'link': '/overview'},
+        {'name': 'barnabe_admin', 'verbose_name': _('Administration'), 'perm': 'barnabe_admin', 'children':
+            [
+                {'name': 'users', 'verbose_name': _('Users'), 'link': '/barnabe_admin/barnabeusers', 'perm': 'barnabe_admin.change_user'},
+                {'name': 'users_groups', 'verbose_name': _('Users Groups'), 'link': '/barnabe_admin/barnabeusers_groups', 'perm': 'barnabe_admin.change_user_group'}
+            ]
+        },
         {'name': 'churchship', 'verbose_name': _('Churchship'), 'perm': 'churchship', 'children':
             [
-                {'name': 'chuch', 'verbose_name': _('Church'), 'link': '/churchship/church', 'perm': 'churchship.change_church'}
+                {'name': 'church', 'verbose_name': _('Church'), 'link': '/churchship/church', 'perm': 'churchship.change_church'}
             ]
         },
         {'name': 'membership', 'verbose_name': _('Membership'), 'perm': 'membership', 'children':

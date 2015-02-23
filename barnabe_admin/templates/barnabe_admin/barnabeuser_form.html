@@ -1,0 +1,65 @@
+{% extends "dashboard_base.html" %}
+{% load i18n %}
+{% load bootstrap_form %}
+
+{% block page_title %}
+{% if form.instance.id %}
+    <h1 class="page-header">{% trans 'Members' %} <small>{% trans 'Editing '%} {{ form.instance.person.name }}</small></h1>
+{% else %}
+    <h1 class="page-header">{% trans 'Members' %} <small>{% trans 'New'%}</small></h1>
+{% endif %}
+
+{% endblock %}
+
+{% block page_content %}
+
+<form class="form-horizontal" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ person_form|as_bootstrap  }}
+    {{ form|as_bootstrap  }}
+    {% buttons %}
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">{% trans 'Discard changes' %}</h4>
+      </div>
+      <div class="modal-body">
+          {% autoescape on %}
+          {% trans 'You have made changes to this form. If you cancel the form, you will loose these changes. Are you shure?' %}
+          {% endautoescape %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+        <button type="button" class="btn btn-primary" id="discard-changes">{% trans 'Discard changes'%}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+var form_changed = false;
+$('input, select').change(function(){
+    form_changed = true;
+})
+
+{% if form.instance.pk %}
+$('#discard-changes').click(function(){
+    window.location = '{% url 'member_detail' form.instance.pk %}';
+});
+
+$('button[type="reset"]').click(function(){
+    if (form_changed)
+       $('#myModal').modal('show');
+    else
+        window.location = '{% url 'member_detail' form.instance.pk %}';
+});
+{% endif %}
+
+</script>
+
+{% endblock %}

@@ -42,8 +42,8 @@ class MemberListView(DashboardListView):
 
 class MemberListTableView(ListView, BaseDatatableView):
     model = models.Member
-    columns = ['id', 'person.name', 'get_member_function']
-    order_columns = ['id', 'person.name', 'get_member_function']
+    columns = ['id', 'person.name', 'member_function']
+    order_columns = ['id', 'person.name', 'member_function']
 
     def filter_queryset(self, qs):
         """ If search['value'] is provided then filter all searchable columns using istartswith

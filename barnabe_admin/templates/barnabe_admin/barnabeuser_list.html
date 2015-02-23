@@ -1,0 +1,245 @@
+{% extends "dashboard_base.html" %}
+{% load i18n %}
+{% load bootstrap_form %}
+
+{% block page_title %}
+<h1 class="page-header">{% trans 'Users' %} <a href="{% url 'barnabeuser_add' %}" class="btn pull-right btn-primary">{% trans 'Create' %} {% trans 'User' %}</a></h1>
+{% endblock %}
+
+{% block header_media %}
+    {{ media_css }}
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block page_content %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                  <input id="barnabeuser-search" type="text" class="form-control" controls="barnabeuser-table" placeholder="Pesquisar">
+                </div>
+            </form>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="btn-group pull-right" role="group" aria-label="">
+                <a href="{% url 'barnabeusers' %}?layout=thumb" class="btn btn-default navbar-btn {% if view.request.GET.layout == 'thumb' %}active{% endif %}"><span style="font-size:12px;" class="glyphicon glyphicon-th"></span></a>
+                <a href="{% url 'barnabeusers' %}" class="btn btn-default navbar-btn {% if not view.request.GET.layout %}active{% endif %}"><span style="font-size:12px;" class="glyphicon glyphicon-list"></span></a>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="row">
+    <div class="col-md-12">
+        {% if layout == 'thumb' %}
+            {% for chunk in object_list|chunks:6 %}
+                <div class="row">
+                {% for barnabeuser in chunk%}
+                    <div class="col-xs-4 col-md-2">
+                        <a href="{{ barnabeuser.get_absolute_url }}" class="thumbnail">
+                            <img src="{{ barnabeuser.person.photo }}" alt="...">
+                            <div class="caption">
+                                <p align="center">{{ barnabeuser.person.name|abbreviate }}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
+            {% endfor %}
+        {% else %}
+        <table class="table" id="barnabeuser-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{% trans 'Name' %}</th>
+                    <th>{% trans 'Username' %}</th>
+                    <th data-class-name="groups">{% trans 'Groups' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {# for barnabeuser in object_list #}
+                {#<tr class="barnabeuser-tr" id="tr-barnabeuser-{{barnabeuser.id}}"><td id="select-barnabeuser-{{barnabeuser.id}}"><input type="checkbox"></td><td>{{barnabeuser.id}}</td><td><a href="{{ barnabeuser.get_absolute_url }}">{{ barnabeuser.person.name }}</a> <span class="edit-link">- <a href="{% url 'barnabeuser_edit' barnabeuser.id %}">{% trans 'edit' %}</a></span></td><td>{{ barnabeuser.barnabeuserFunction }}</td></tr>#}
+            {# endfor #}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+
+{% if layout != 'thumb' %}
+    {% include 'includes/group-multiple-selection.html' with obj_class='barnabeuser' %}
+{% endif %}
+<div id="remove-barnabeusers-prompt" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{% trans 'Confirm deletion' %}</h4>
+      </div>
+      <div class="modal-body">
+        <p id="remove-barnabeusers-confirm-message">{% trans "Do you really want to delete barnabeusers" %}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'No' %}</button>
+        <button id="remove-barnabeusers-confirm" type="button" class="btn btn-primary">{% trans 'Confirm' %}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{% if is_paginated and layout == 'thumb'%}
+    <nav>
+        <ul class="pagination pull-right">
+            {% if page_obj.has_previous %}
+            <li>
+                <a href="{% url 'barnabeusers' %}?layout=thumb&page={{ page_obj.previous_page_number }}" aria-label="{% trans 'Previous' %}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for page in paginator.page_range %}
+                <li  {% if page == page_obj.number %} class="active" {% endif %}><a href="{% url 'barnabeusers' %}?layout=thumb&page={{ page }}">{{ page }} {% if page == page_obj.number %} <span class="sr-only">(current)</span> {% endif %}</a></li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li>
+                <a href="{% url 'barnabeusers' %}?layout=thumb&page={{ page_obj.next_page_number }}" aria-label="{% trans 'Next' %}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+      </ul>
+    </nav>
+{% endif %}
+    <script type="text/javascript">
+        function getCookie(name) {
+            var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = $.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        function sameOrigin(url) {
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        $(document).ready( function () {
+            $.fn.dataTable.ext.errMode = 'throw';
+            var table = $('#barnabeuser-table').DataTable({
+                columns: [null, null, null, {searchable: false}],
+                serverSide: true,
+                dom: "rtip",
+                ajax: '{% url 'barnabeuser_list_table' %}',
+                 language: {
+                    "emptyTable":     "{% trans 'No data available in table'%}",
+                    "info":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
+                    "infoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
+                    "infoFiltered":   "({% trans 'filtered from _MAX_ total entries'%})",
+                    "infoPostFix":    "",
+                    "thousands":      ",",
+                    "lengthMenu":     "{% trans 'Show _MENU_ entries'%}",
+                    "loadingRecords": "{% trans 'Loading'%}...",
+                    "processing":     "{% trans 'Processing'%}...",
+                    "search":         "{% trans 'Search'%}:",
+                    "zeroRecords":    "{% trans 'No matching records found'%}",
+                    "paginate": {
+                        "first":      "{% trans 'First'%}",
+                        "last":       "{% trans 'Last'%}",
+                        "next":       "{% trans 'Next'%}",
+                        "previous":   "{% trans 'Previous'%}"
+                    },
+                    "aria": {
+                        "sortAscending": "{% trans 'activate to sort column ascending'%}",
+                        "sortDescending": "{% trans 'activate to sort column descending'%}"
+                    }
+                }
+            });
+
+            $('#barnabeuser-search').on( 'keyup', function () {
+                table.search( this.value ).draw();
+            });
+
+            $('#barnabeuser-table tbody').on( 'click', 'tr', function () {
+                $(this).toggleClass('selected');
+                if ($('tr.selected').size() == 0){
+                    $('button#multiple-selection-action').attr('disabled','');
+                    $('button#multiple-selection-action-toggle').attr('disabled','');
+                }else{
+                    $('button#multiple-selection-action').removeAttr('disabled');
+                    $('button#multiple-selection-action-toggle').removeAttr('disabled');
+                }
+            });
+            var erase_objs = [];
+            $('#remove-barnabeusers').click(function(){
+                erase_objs = [];
+                $('tr.selected').each(function(i,e){
+                    erase_objs.push({
+                        'id': $(e).find('td a').first().attr('obj_id'),
+                        'name': $(e).find('span[attr_name="person.name"]').first().text()
+                    });
+                });
+                console.log(erase_objs);
+                if (erase_objs.length > 0){
+                    var barnabeusers_name = [];
+                    for (var i=0; i < erase_objs.length; i++) barnabeusers_name.push(erase_objs[i].name);
+                    var message = "{% trans 'Do you really want to delete the barnabeusers:' %} " + barnabeusers_name.join(', ')+"?"
+                    $('#remove-barnabeusers-confirm-message').text(message);
+                    $('#remove-barnabeusers-prompt').modal();
+                }
+            });
+
+            $('#remove-barnabeusers-confirm').click(function(){
+                var barnabeusers_id = [];
+                for (var i = 0; i < erase_objs.length; i++) barnabeusers_id.push(erase_objs[i].id);
+                $.ajax({
+                    url: '{% url 'barnabeusers' %}',
+                    type: 'delete',
+                    data: JSON.stringify({'id': barnabeusers_id}),
+                    success: function(data){
+                        $('#remove-barnabeusers-prompt').modal('hide');
+                        Dashboard.show_message("{% trans 'Deleting barnabeusers...' %}", 'warning');
+                        window.location = '{% url 'barnabeusers' %}';
+                    },error: function(){
+                        $('#remove-barnabeusers-prompt').modal('hide');
+                        Dashboard.show_message("{% trans 'Some error occurred.' %}", 'error');
+                    }
+                })
+            });
+
+
+        } );
+    </script>
+{% endblock %}
+
+{% block footer_media %}
+    {{ media_js }}
+    <script type="text/javascript" charset="utf8" src="{{STATIC_URL}}js/jquery.dataTables.min.js"></script>
+{% endblock %}

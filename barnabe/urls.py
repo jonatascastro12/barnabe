@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^dashboard/profile$', 'barnabe.views.profile', name="user_profile"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^dashboard/image_upload', 'barnabe.views.image_upload', name="image_upload"),
+    url(r'^dashboard/barnabe_admin', include('barnabe_admin.urls'),),
     url(r'^dashboard/membership', include('membership.urls'),),
     url(r'^dashboard/churchship', include('churchship.urls'),),
 )

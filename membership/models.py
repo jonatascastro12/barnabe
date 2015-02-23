@@ -90,6 +90,9 @@ class Member(models.Model):
         else:
             return self.member_function.name
 
+    def get_member_function_display(self):
+        return self.get_member_function()
+
     @permalink
     def get_absolute_url(self):
         return ('member_detail', (), {'pk': self.id})

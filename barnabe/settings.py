@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'bootstrap_form',
     'bootstrap3_datetime',
     'nested_inline',
+    'barnabe_admin',
     'churchship',
     'membership',
     'discipleship',

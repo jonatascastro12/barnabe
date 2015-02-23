@@ -6,15 +6,6 @@ from django.db.models import permalink
 from django.utils.translation import ugettext as _
 from barnabe.utils import STATE_CHOICES, BARNABE_PERMISSION_CHOICES
 
-
-class BarnabeUser(models.Model):
-    user = models.OneToOneField(User)
-    supervisor = models.ForeignKey('self', blank=True, null=True)
-    is_supervisor = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.user.username.encode('utf8')
-
 class ChurchType(models.Model):
     name = models.CharField(max_length=255)
 
@@ -48,11 +39,3 @@ class Church(models.Model):
 
     class Meta:
         verbose_name = _('Church')
-
-class BarnabeUserChurch(models.Model):
-    barnabe_user = models.ForeignKey(BarnabeUser)
-    church = models.ForeignKey(Church)
-    permission = models.CharField(default='ADM', max_length=30, choices=BARNABE_PERMISSION_CHOICES)
-
-    def __str__(self):
-        return (self.barnabe_user.user.username + u" " + self.permission + u" em " + self.church.name).encode('utf8')

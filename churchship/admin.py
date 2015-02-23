@@ -1,5 +1,6 @@
 from django.contrib import admin
-from churchship.models import Church, ChurchType, BarnabeUser, BarnabeUserChurch
+from barnabe_admin.models import BarnabeUser, BarnabeUserChurch
+from churchship.models import Church, ChurchType
 
 
 class ChurchAdmin(admin.ModelAdmin):
